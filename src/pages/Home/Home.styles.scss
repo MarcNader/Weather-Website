@@ -1,0 +1,104 @@
+.container{
+    display: flex;
+    .first-section{
+        box-sizing: border-box;
+        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
+        height: 100vh;
+        width: 60%;
+        padding: 2em;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        color: white;
+        .cloudySky{
+        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
+        }
+        .rainySky{
+        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
+        }
+        .clearSky{
+        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
+        }
+        .sunnySky{
+        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
+        }
+        .header{
+            display: flex;
+            justify-content: flex-end;
+            color: white;
+            font-size: 60px;
+            font-family: 'Times New Roman';
+        }
+        .footer{
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Times New Roman';
+            .date-time{
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                flex: 1;
+                font-size: 60px;
+                gap: 0.3em;
+                font-family: 'Times New Roman';
+                .date{
+                    font-size: 30px;
+                    letter-spacing: 5px;
+                    // word-spacing: 6px;
+                    font-family: 'Courier New';
+                }
+            }
+            .temperature{
+                font-size: 160px;
+            }
+        }
+    }
+    .second-section{
+        flex: 1;
+        height: 100vh;
+        padding-top: 3em;
+        padding-inline: 4em;
+        background-color: #1F1F2B;
+        box-sizing: border-box;
+        font-family: 'Times New Roman', Times, serif;
+        .icon{
+            display: flex;
+            justify-content: center;
+        }
+        .weather-condition{
+            color: white;
+            font-size: 80px;
+            text-align: center;
+            margin-top: 1em;
+        }
+        .search-bar{
+            display: flex;
+            padding-left: 5%;
+            margin-top: 2em;
+            .search-box{
+                display: flex;
+                flex: 1;
+                border: none;
+                border-bottom: 1px solid white; /* Add bottom border */
+                background-color: transparent;
+                outline: none;
+                color: white;
+                font-size: 28px;
+                text-align: center;
+            }
+        }
+        .weather-details{
+            display: flex;
+            justify-content: space-between;
+            margin-block: 1em;
+            padding-inline: 10%;
+            border-bottom: 1px solid white; 
+            color: White;
+            font-size: 24px;
+            
+        }
+    }
+
+}
+
+

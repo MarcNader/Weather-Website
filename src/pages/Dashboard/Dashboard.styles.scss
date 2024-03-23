@@ -1,0 +1,155 @@
+.wrapper{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: #1C1A3F;
+    padding: 2em;
+    box-sizing: border-box;
+    .body{
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            overflow: scroll;
+    }
+}
+
+.gadgets-container{
+    color: white;
+}
+
+.weather-card{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 750px;
+    border-radius: 15px;
+    padding: 1em;
+    background-color: #13132F;
+    box-sizing: border-box;
+    margin-bottom: 1em;
+    .first-row{
+        width: 50%;
+    }
+    .header{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        color: white;
+        h1{
+            margin: 0;
+            color: white;
+            font-size: 80px;
+        }
+        p{
+            text-align: center;
+            font-size: 18px;
+        }
+    }
+    .info-cards-container{
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 1em;
+        height: 100%;
+        margin-top: 1.5em;
+        h4{
+            margin: 0;
+            margin-block: 10px;
+            text-transform: uppercase;
+        }
+        h2{
+            margin: 0;
+        }
+        .info-card{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            padding-inline: 20px;
+            width: 40%;
+            border-radius: 10px;
+            height: 200px;
+            font-size: 24px;
+            background-color:#312E74;
+            h2{
+                font-size: 65px;
+            }
+        }
+    }
+}
+
+.second-section{
+    width: 60%;
+}
+.time-cards-container{
+    background-color: #13132F;
+    height: 180px;
+    border-radius: 15px;
+    padding: 1em;
+    margin-bottom: 1em;
+    h4{
+        margin: 0;
+    }
+    hr{
+        border: none;
+        border-top: 1px solid #292846;
+    }
+    .time-card-wrapper{
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+    margin-block: 1em;
+    height: 75%;
+    overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+    padding-block: 0.5em;
+    display: -webkit-box;
+    -webkit-box-orient: horizontal;
+    }
+    .time-card-wrapper::-webkit-scrollbar{
+        width: 2rem;
+        height: 0.5rem;
+        background-color: rgba(49, 46, 116, 0.7);
+    }
+    .time-card-wrapper::-webkit-scrollbar-thumb{
+        border-radius: .5rem;
+        background-color: #302E74;
+        visibility: hidden;
+    }
+    .time-card-wrapper::-webkit-scrollbar-corner{
+        background-color: rgba(49, 46, 116, 0.7);
+    }
+    .time-card-wrapper:hover::-webkit-scrollbar-thumb{ 
+        visibility: visible;
+    }
+}
+
+.weekly-card {
+    height: 300px;
+}
+.footer-gadgets-container{
+    display: flex;
+    justify-content: space-between;
+    gap: 1.5em;
+    color: white;
+    .footer-gadget{
+        padding-inline: 20px;
+        width: 50%;
+        border-radius: 10px;
+        height: 200px;
+        background-color:#312E74;
+        text{
+            font-size: 16px;
+        }
+        h5{
+            // font-size: 65px;
+            margin: 0;
+            margin-top: 1em;
+        }
+        h1{
+            margin-bottom: 5px;
+        }
+    }
+}

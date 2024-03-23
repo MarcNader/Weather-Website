@@ -1,0 +1,21 @@
+.time-card{
+    padding:1em;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    h5, h2{
+        margin: 0;
+    }
+    h2{
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+    &:hover {
+        background-color: rgba(49, 46, 116, 0.5);
+    }
+    .row{
+        display: flex;
+        align-items: center;
+        gap: 1em;
+    }
+}
