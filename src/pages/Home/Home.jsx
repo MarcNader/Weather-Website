@@ -1,8 +1,6 @@
 import './Home.styles.scss'
-// import Cloudy from '../../assets/Icons/cloudy.png'
-import Cloudy from '../../assets/Icons/cloudy.png'
 import Search from "../../assets/Icons/search.png"
-import {useEffect, useState} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {fetchCurrentWeather} from '../../utils/api';
 import {iconRenderer} from '../../utils/helpers';
@@ -13,6 +11,11 @@ const [currentTime, setCurrentTime] = useState(null);
 const [icon, setIcon] = useState();
 const [search, setSearch] = useState('');
 const [currentCondition, setcurrentCondition] = useState()
+const [loading, setLoading] = useState(true)
+// eslint-disable-next-line multiline-ternary
+const searchIconSize= window.innerWidth < 900 ? 40 : 65
+// eslint-disable-next-line multiline-ternary
+const weatherIconSize = window.innerWidth < 900 ? 100 : 150
 
   const [location, setLocation] = useState(
     {
@@ -53,7 +56,6 @@ const [currentCondition, setcurrentCondition] = useState()
 
     try {
       const response = await fetchCurrentWeather(query);
-      console.log('DATA FETCHED in Home', response);
   
       if (response.data) {
         const city = response.data.nearest_area[0].region[0].value
@@ -69,8 +71,7 @@ const [currentCondition, setcurrentCondition] = useState()
           }
         )
         sessionStorage.setItem('city', JSON.stringify(`${city}, ${country}`));
-
-  
+        setLoading(false)
       } else {
         alert('Please enter a valid city nName');
       }
@@ -91,7 +92,6 @@ const WeatherDetails=({title, value})=>{
 const handleKeyDown = (event) => {
   if (event.key === 'Enter') {
     sessionStorage.setItem('city', JSON.stringify(search));
-    console.log("Enter Pressed");
     navigate("/dashboard")
     }
 };
@@ -106,63 +106,67 @@ const options = {
 const currentDate = new Date().toLocaleDateString('en-US', options);
 
   return (
-    <div className='container'>
-      <div className="first-section">
-        <div className="header">
-          {location && location.country}
-        </div>
-        <div className="footer">
-          <div className="date-time">
-            <div>{currentTime}</div>
-            <div className='date'>{currentDate}</div>
+    loading
+    ? <Fragment/>
+    : (
+      <div className='container'>
+        <div className="first-section">
+          <div className="header">
+            {location && location.country}
           </div>
-          <div className="temperature">
-            {`${currentCondition && currentCondition[0]?.temp_C} °C`}
+          <div className="footer">
+            <div className="date-time">
+              <div>{currentTime}</div>
+              <div className='date'>{currentDate}</div>
+            </div>
+            <div className="temperature">
+              {`${currentCondition && currentCondition[0]?.temp_C} °C`}
+            </div>
+          </div>
+        </div>
+        <div className="second-section">
+          <div className="icon">
+            <img
+              src={icon}
+              width={weatherIconSize}
+              style={{color:'white'}}
+              className='dropdwon-icon'
+            />
+          </div>
+          <div className="weather-condition">
+            {currentCondition && currentCondition[0]?.weatherDesc[0].value}
+          </div>
+          <hr/>
+          <div className="search-bar">
+            <input
+              type='search'
+              className="search-box"
+              placeholder='Search City'
+              onChange={(e) => setSearch(e.target.value)}
+              onKeyDown={handleKeyDown}
+            />
+            <img
+              src={Search}
+              width={searchIconSize}
+              style={{color:'white'}}
+              className='dropdwon-icon'
+            />      
+          </div>
+          <div>
+            <WeatherDetails title='UV Index' value={currentCondition && currentCondition[0]?.uvIndex}/>
+            <WeatherDetails title='Humidity' value={`${currentCondition && currentCondition[0]?.humidity}%`}/>
+            <WeatherDetails title='Visibility' value={`${currentCondition && currentCondition[0]?.visibility} km`}/>
+            <WeatherDetails title='Wind Speed' value={`${currentCondition && currentCondition[0]?.humidity} km/h`}/>
+          </div>
+          <div style={{fontSize:'24px', textAlign:'center', paddingBlock:'1em'}}>
+            <Link
+              to="/dashboard"
+              style={{color:'#80CDF6'}}>More Details
+            </Link>
           </div>
         </div>
       </div>
-      <div className="second-section">
-        <div className="icon">
-          <img
-            src={icon}
-            width={150}
-            style={{color:'white'}}
-            className='dropdwon-icon'
-          />
-        </div>
-        <div className="weather-condition">
-          {currentCondition && currentCondition[0]?.weatherDesc[0].value}
-        </div>
-        <hr/>
-        <div className="search-bar">
-          <input
-            type='search'
-            className="search-box"
-            placeholder='Search City'
-            onChange={(e) => setSearch(e.target.value)}
-            onKeyDown={handleKeyDown}
-          />
-          <img
-            src={Search}
-            width='65px'
-            style={{color:'white'}}
-            className='dropdwon-icon'
-          />      
-        </div>
-        <div>
-          <WeatherDetails title='UV Index' value={currentCondition && currentCondition[0]?.uvIndex}/>
-          <WeatherDetails title='Humidity' value={`${currentCondition && currentCondition[0]?.humidity}%`}/>
-          <WeatherDetails title='Visibility' value={`${currentCondition && currentCondition[0]?.visibility} km`}/>
-          <WeatherDetails title='Wind Speed' value={`${currentCondition && currentCondition[0]?.humidity} km/h`}/>
-        </div>
-        <div style={{fontSize:'24px', textAlign:'center', paddingTop:'1em'}}>
-          <Link
-            to="/dashboard"
-            style={{color:'#80CDF6'}}>More Details
-          </Link>
-        </div>
-      </div>
-    </div>
+  )
   )
 }
 

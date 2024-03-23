@@ -6,21 +6,8 @@ import Celsius from"../../assets/Icons/celsius.png"
 import Switch from "react-switch";
 
 const NavBar = ({title}) => {
-  const [screenWidth, setScreenWidth] = useState(window.innerWidth)
   const [search, setSearch] = useState('');
   const [metricSystem, setMetricSystem] = useState(true)
-  useEffect(() => {
-    const handleResize = () => {
-      setScreenWidth(window.innerWidth)
-    }
-
-    window.addEventListener('resize', handleResize)
-
-    return () => {
-      window.removeEventListener('resize', handleResize)
-    }
-  }, [])
-
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
@@ -35,26 +22,11 @@ const NavBar = ({title}) => {
 
   return (
     <div className="navbar">
-      {/* {
-        screenWidth < 701 && (
-          <div onClick={openDrawer} className='drop-down-container'>
-            <img
-              src={Cloudy}
-              width={'20px'}
-              className='dropdwon-icon'
-            />
-          </div>
-        )
-      } */}
       <div className='row'>
-        <h3 style={{color:'white', fontFamily:'Tahoma', paddingLeft:'1em'}}>{title}</h3>
+        <h3 className='title'>{title}</h3>
         <input
           type="search"
-          style={{width:'300px', 
-          height:'35px', 
-          marginLeft:'1em',
-          borderRadius:'10px', 
-          borderColor:'purple'}}
+          className='navbar-searchBox'
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}
         />

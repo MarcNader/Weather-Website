@@ -3,8 +3,8 @@ import "./HourlyWeatherCard.styles.scss"
 const HourlyWeatherCard = ({title,degree,icon}) => {
     return(
       <div className="hourly-card-temp">
-        <h5>{title}</h5>
-        <h2>{degree}</h2>
+        <h2>{title}</h2>
+        <h1>{degree}</h1>
         <img
           src={icon}
           width={35}

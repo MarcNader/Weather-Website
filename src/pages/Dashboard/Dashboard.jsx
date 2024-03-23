@@ -1,4 +1,5 @@
-import {Fragment, useEffect,useState} from 'react';
+/* eslint-disable multiline-ternary */
+import {useEffect,useState} from 'react';
 import LineChart from '../../components/LineChart/LineChart';
 import NavBar from '../NavBar/NavBar';
 import './Dashboard.styles.scss'
@@ -8,11 +9,14 @@ import Precipitation from "../../assets/Icons/waterdrop.png"
 import Humidity from "../../assets/Icons/coloredHumidity.png"
 import Visibility from "../../assets/Icons/coloredVisivbility.png"
 import Rainy from "../../assets/Icons/rainy.png"
+import Clock from "../../assets/Icons/clock.png"
+import Calendar from "../../assets/Icons/calendar.png"
 
 import {buildStyles, CircularProgressbar} from 'react-circular-progressbar';
 import WeeklyTempCard from '../../components/WeeklyTempCard/WeeklyTempCard';
 import HourlyWeatherCard from '../../components/HourlyWeatherCard/HourlyWeatherCard';
 import {iconRenderer} from '../../utils/helpers';
+import InfoCard from '../../components/InfoCard/InfoCard';
 
 const Dashboard = () => {
 const city = sessionStorage.getItem('city');
@@ -57,12 +61,23 @@ const [data, setData] = useState(
     ]
 )
 
+const[weatherIcon, setWeatherIcon] = useState(Rainy)
+
+const ChartSize = window.innerWidth < 1000 ? 
+{
+  width: 270,
+  height: 300,
+}
+: {
+  width: 700,
+  height: 520,
+}
+ 
 const [currentCondition, setcurrentCondition] = useState()
 
 const fetchData = async (name) => {
   try {
     const response = await fetchCurrentWeather(name);
-    console.log('DATA FETCHED', response);
 
     if (response.data) {
       setLocation(
@@ -73,15 +88,10 @@ const fetchData = async (name) => {
         )
       setData(response.data.weather)
       setcurrentCondition(response.data.current_condition)
-      console.log("CURRENT CONDITION",response.data.current_condition );
-      sessionStorage.setItem('city', JSON.stringify(response.data.request[0].query));
 
-      const weather = response.data.weather;
-      const dateObject = new Date(weather[0].date);
-      const dayOfWeek = dateObject.getDay();
-      const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-      const weekdayName = weekdays[dayOfWeek];
-      console.log('Weekday:', weekdayName);
+      const weather_icon = iconRenderer(response.data.current_condition.weatherDesc[0].value)
+      setWeatherIcon(weather_icon)
+      sessionStorage.setItem('city', JSON.stringify(response.data.request[0].query));
     } else {
       alert('Please enter a valid city and/or country name');
     }
@@ -93,22 +103,6 @@ const fetchData = async (name) => {
 useEffect(() => {
  fetchData(location.city + location.country)
 }, [])
-
-const InfoCard = ({title,value,icon})=>{
-  return(
-    <div className="info-card">
-      <h4>{title}</h4>
-      <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-        <h2>{value}</h2>
-        <img
-          src={icon}
-          width={80}
-          height={80}
-        />
-      </div>
-    </div>
-  )
- }
 
  const PerCentageInfoCard =({title,percentage,icon})=>{
   const calcHumidity = (percentage)=>{
@@ -122,20 +116,22 @@ const InfoCard = ({title,value,icon})=>{
   }
 
   const severity = calcHumidity(percentage)
+  const iconSize = window.innerWidth < 900 ? 30 : 40
+  const barSize = window.innerWidth < 900 ? 'small-bar-size' : 'large-bar-size'
 
     return(
-      <div className="info-card">
-        <div style={{display:'flex', marginBottom:'1em'}}>
+      <div className="percentage-info-card">
+        <div className='percentage-info-header'>
           <img
             src={icon}
-            width={40}
-            height={40}
+            width={iconSize}
+            height={iconSize}
             style={{marginRight:'5px'}}
           />
           <h4>{title}</h4>
         </div>
-        <div style={{display:'flex', alignItems:'center', justifyContent:'space-between'}}>
-          <div style={{width:'100px', height:'100px'}}> 
+        <div className='progressBar-container'>
+          <div className={barSize}> 
             <CircularProgressbar
               value={percentage}
               text={`${percentage}%`}
@@ -164,7 +160,7 @@ const InfoCard = ({title,value,icon})=>{
   {
     title:"feels like",
     icon: Rainy,
-    value:currentCondition && currentCondition[0]?.FeelsLikeC,
+    value:currentCondition && currentCondition[0]?.FeelsLikeC + " °C",
   },
   {
     title:"Precipitation",
@@ -174,7 +170,7 @@ const InfoCard = ({title,value,icon})=>{
   {
     title:"Visibility",
     icon:Visibility,
-    value:currentCondition && currentCondition[0]?.visibility,
+    value:currentCondition && currentCondition[0]?.visibility + " km",
   },
  ]
 
@@ -182,61 +178,62 @@ const hourlyTemps = data[0].hourly.map(obj => {
   const {time, tempC} = obj;
 
   return {
-    time: time === "0"
-? 0
-: Number(time) / 100,
+    time: time === "0" ? 0 : Number(time) / 100,
     temp: tempC
   };
 });
-console.log("Hourly Temp",hourlyTemps);
 
   return (
-    <Fragment>
-      <div className="wrapper">
-        <NavBar title={`${location.city},${location.country}`}/>
-        <div className="body">
-          <div className="gadgets-container">
-            <div className="weather-card">
-              <div className="first-row">
-                <div className="header">
-                  <h1>{currentCondition && currentCondition[0]?.temp_C}</h1>
-                  <h2>{currentCondition && currentCondition[0]?.weatherDesc[0].value}</h2>
-                </div>  
-                <div className="footer">
-                  <div className="info-cards-container">
-                    {
-                infoCardsData.map((data,index)=>(
-                  <InfoCard
-                    key={index}
-                    title={data.title}
-                    icon={data.icon}
-                    value={data.value}
-                  />
-                ))
+    <div className="wrapper">
+      <NavBar title={`${location.city},${location.country}`}/>
+      <div className="body">
+        <div className="gadgets-container">
+          <div className="weather-card">
+            <div className="first-row">
+              <div className="header">
+                <h1>{currentCondition && `${currentCondition[0]?.temp_C} °C`}</h1>
+                <h2>{currentCondition && currentCondition[0]?.weatherDesc[0].value}</h2>
+              </div>  
+              <div className="footer">
+                <div className="info-cards-container">
+                  {
+                infoCardsData.map((data,index)=>{
+                  const icon = data.title === "feels like" ? weatherIcon : data.icon
+
+                  return (
+                    <InfoCard
+                      key={index}
+                      title={data.title}
+                      icon={icon}
+                      value={data.value}
+                    />)
+                })
               }
-                    <PerCentageInfoCard
-                      title={"Humidity"}
-                      icon={Humidity}
-                      percentage={currentCondition && currentCondition[0]?.humidity}
-                    />
-                  </div>
+                  <PerCentageInfoCard
+                    title={"Humidity"}
+                    icon={Humidity}
+                    percentage={currentCondition && currentCondition[0]?.humidity}
+                  />
                 </div>
               </div>
-              <div className="second-row">
-                <h1>Today Hourly T°</h1>
-                <LineChart
-                  data={hourlyTemps}
-                  width={700}
-                  height={520}
-                />
-              </div>
-            </div> 
-            <div className="second-section">
-              <div className="time-cards-container">
-                <h4>Hourly Forecast</h4>
-                <hr/>
-                <div className="time-card-wrapper" style={{gap:'3em'}}>
-                  {
+            </div>
+            <div className="second-row">
+              <h1>Today Hourly T°</h1>
+              <LineChart
+                data={hourlyTemps}
+                width={ChartSize.width}
+                height={ChartSize.height}
+              />
+            </div>
+          </div> 
+          <div className="time-cards-container">
+            <div style={{display:'flex', alignItems:'center', gap:'5px'}}>
+              <img src={Clock} width={30}/>
+              <h4>Hourly Forecast</h4>
+            </div>
+            <hr/>
+            <div className="time-card-wrapper" style={{gap:'3em'}}>
+              {
                     data[0].hourly.map((value,index)=>{
                       let time
                       value.time === '0'
@@ -256,39 +253,31 @@ console.log("Hourly Temp",hourlyTemps);
                       )
                       })
                   }
-                </div>
-              </div>
-              <div className="time-cards-container weekly-card">
-                <h4>Weekly Forecast</h4>
-                <hr/>
-                <div className="time-card-wrapper">
-                  {
-                    data.map((value,index)=>(                        
-                      <WeeklyTempCard
-                        key={index}
-                        title={"Today"}
-                        maxDegree={value.maxtempC}
-                        minDegree={value.mintempC}
-                      />
-                      )
-                    )
-                  }
-                </div>
-              </div>
-              <div className="footer-gadgets-container">
-                <div className="footer-gadget">
-                  <h4>UV Index</h4>
-                  <h1>3</h1>
-                  <text>Moderate</text>
-                </div>
-                <div className="footer-gadget">
-                </div>
-              </div>
             </div>
-          </div>        
-        </div>
+          </div>
+          <div className="time-cards-container weekly-card">
+            <div style={{display:'flex', alignItems:'center', gap:'5px'}}>
+              <img src={Calendar} width={30}/>
+              <h4> Two Weeks Forecast</h4>
+            </div>
+            <hr/>
+            <div className="time-card-wrapper">
+              {
+              data.map((value,index)=>(                        
+                <WeeklyTempCard
+                  key={index}
+                  title={value.date}
+                  maxDegree={value.maxtempC}
+                  minDegree={value.mintempC}
+                />
+                    )
+                    )
+                }
+            </div>
+          </div>
+        </div>        
       </div>
-    </Fragment>
+    </div>
   )
 }
 

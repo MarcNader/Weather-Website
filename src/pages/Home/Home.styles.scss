@@ -1,5 +1,7 @@
 .container{
     display: flex;
+    height: 100vh;
+    overflow: scroll;
     .first-section{
         box-sizing: border-box;
         background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
@@ -20,6 +22,7 @@
         .footer{
             display: flex;
             justify-content: space-between;
+            align-items: center;
             font-family: 'Times New Roman';
             .date-time{
                 display: flex;
@@ -46,10 +49,10 @@
         height: 100vh;
         padding-top: 3em;
         padding-inline: 4em;
-        box-sizing: border-box;
         background-color: #1F1F2B;
         box-sizing: border-box;
         font-family: 'Times New Roman', Times, serif;
+        // overflow: scroll;
         .icon{
             display: flex;
             justify-content: center;
@@ -95,6 +98,7 @@
     opacity: 1; /* Firefox */
   }
   
+  // Laptop different screen adjustments
   @media (min-width: 1200px) and (max-width: 1440px) {
     .container .first-section .footer .temperature{
         font-size: 120px;
@@ -106,7 +110,7 @@
         font-size: 22px;
     }
   }
-  @media screen and (max-width: 1200px) {
+  @media (min-width: 1024px)  and (max-width: 1200px) {
     .container .first-section .footer .temperature{
         font-size: 80px;
     }
@@ -117,3 +121,43 @@
         font-size: 18px;
     }
   }
+    //Mobiles vertical view
+    @media screen and (max-width: 920px) {
+      .container{
+        width: 100%;
+        flex-direction: column;
+        .first-section{
+            height: 100%;
+            width: 100%;
+            padding: 1em;
+            .footer{
+                .temperature{
+                  font-size: 40px;
+                  }
+                 .date-time{
+                  font-size: 25px;
+                  }
+                  .date-time .date{
+                      font-size: 12px;
+                  }
+            }
+        }
+        .second-section{
+            width: auto;
+            height: max-content;
+            padding-inline: 2em;
+            box-sizing: content-box;
+            .weather-condition{
+                font-size: 50px;
+            }
+            .weather-details{
+                padding-block: 0.5em;
+            }
+            .search-bar{
+                .search-box{
+                    width: 100%;
+                }
+            }
+        }
+      }
+    }

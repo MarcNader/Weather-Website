@@ -1,3 +1,4 @@
+/* eslint-disable multiline-ternary */
 import {useEffect, useRef} from 'react';
 import * as d3 from 'd3';
 
@@ -13,6 +14,8 @@ const LineChart = ({data, width, height}) => {
     const innerHeight = height - margin.top - margin.bottom;
     const max = parseInt(d3.max(data, d => d.temp));
     const min = parseInt(d3.min(data, d => d.temp));
+    const LabelsSize = window.innerWidth < 900 ? '18px' : '24px'
+    const numbersSize = window.innerWidth < 900 ? '14px' : '18px' 
 
     // Create SVG element
     const svg = d3.select(svgRef.current)
@@ -51,13 +54,13 @@ const LineChart = ({data, width, height}) => {
       .attr('transform', `translate(${margin.left}, ${innerHeight + margin.top})`)
       .call(xAxis)
       .selectAll('text')
-      .style('font-size', '18px');
+      .style('font-size', numbersSize);
 
     svg.append('g')
       .attr('transform', `translate(${margin.left}, ${margin.top})`)
       .call(yAxis)
       .selectAll('text')
-      .style('font-size', '18px');
+      .style('font-size', numbersSize);
 
       //Grid
     svg.append('g')
@@ -98,7 +101,7 @@ const LineChart = ({data, width, height}) => {
       .attr('transform', `translate(${width / 2}, ${height - 10})`)
       .style('text-anchor', 'middle')
       .style('fill', 'white') 
-      .style('font-size', '24px')
+      .style('font-size', LabelsSize)
       .text('Time (hr)');
 
     // Adding y-axis label
@@ -107,7 +110,7 @@ const LineChart = ({data, width, height}) => {
       .attr('transform', `translate(${margin.left / 2 - 10}, ${height / 2}) rotate(-90)`)
       .style('text-anchor', 'middle')
       .style('fill', 'white') 
-      .style('font-size', '24px')
+      .style('font-size', LabelsSize)
       .text('Temperature (°C)');
   }, [data, width, height]);
 

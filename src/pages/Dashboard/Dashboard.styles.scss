@@ -63,7 +63,7 @@
         h2{
             margin: 0;
         }
-        .info-card{
+        .percentage-info-card{
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -76,17 +76,30 @@
             background-color:#312E74;
             h2{
                 font-size: 65px;
+            };
+            .percentage-info-header{
+                display: flex;
+                margin-bottom: 1em;
+            }
+            .progressBar-container{
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+            .small-bar-size{
+                height: 35px;
+                width: 35px;
+            }
+            .large-bar-size{
+                height: 100px;
+                width: 100px;
             }
         }
     }
 }
-
-.second-section{
-    width: 60%;
-}
 .time-cards-container{
     background-color: #13132F;
-    height: 200px;
+    height: 250px;
     border-radius: 15px;
     padding: 1em;
     margin-bottom: 1em;
@@ -131,7 +144,6 @@
 .weekly-card {
     height: 220px;
 }
-
 .footer-gadgets-container{
     display: flex;
     justify-content: space-between;
@@ -147,7 +159,6 @@
             font-size: 16px;
         }
         h5{
-            // font-size: 65px;
             margin: 0;
             margin-top: 1em;
         }
@@ -155,4 +166,40 @@
             margin-bottom: 5px;
         }
     }
+}
+
+@media screen and (max-width: 800px) {
+    .weather-card{
+        flex-direction: column;
+        height: auto;
+        .first-row {
+            width: auto;
+        }
+        .header{
+            h1{
+                font-size: 50px;
+            }
+        }
+        .info-cards-container{
+            .percentage-info-card{
+                flex: 1;
+                height: 100px;
+                h4{
+                    font-size: 11px;
+                }
+                h1{
+                    font-size: 20px;
+                    margin: 0;
+                }
+                .percentage-info-header{
+                    margin-bottom: 0.5em;
+                }
+            }
+        }
+    }
+    .navbar .navbar-searchBox{
+        margin-inline: 0.5em;
+    }
+    
+
 }

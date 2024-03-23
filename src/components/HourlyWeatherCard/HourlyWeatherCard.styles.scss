@@ -1,5 +1,5 @@
 .hourly-card-temp{
-    padding:2em;
+    padding:4em;
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
@@ -17,4 +17,10 @@
     &:hover {
         background-color: rgba(49, 46, 116, 0.5);
     }
+}
+
+@media screen and (max-width: 800px) {
+   .hourly-card-temp{
+    padding: 2em;
+   }
 }
