@@ -3,18 +3,26 @@ import LineChart from '../../components/LineChart/LineChart';
 import NavBar from '../NavBar/NavBar';
 import './Dashboard.styles.scss'
 import {fetchCurrentWeather} from '../../utils/api';
-import ColoredCloudy from "../../assets/Icons/cloudyColored.png"
+
 import Precipitation from "../../assets/Icons/waterdrop.png"
 import Humidity from "../../assets/Icons/coloredHumidity.png"
 import Visibility from "../../assets/Icons/coloredVisivbility.png"
-import Rainy from "../../assets/Icons/Coloredrain.png"
+import Rainy from "../../assets/Icons/rainy.png"
+
 import {buildStyles, CircularProgressbar} from 'react-circular-progressbar';
 import WeeklyTempCard from '../../components/WeeklyTempCard/WeeklyTempCard';
 import HourlyWeatherCard from '../../components/HourlyWeatherCard/HourlyWeatherCard';
+import {iconRenderer} from '../../utils/helpers';
 
 const Dashboard = () => {
 const city = sessionStorage.getItem('city');
-const [cityName, setCityName] = useState(JSON.parse(city))
+
+const [location, setLocation] = useState(
+  {
+    city: JSON.parse(city),
+    country:''
+  }
+)
 
 const [data, setData] = useState(
     [
@@ -48,18 +56,24 @@ const [data, setData] = useState(
 
     ]
 )
-// const [cityName, setCityName] = useState("Cairo")
 
+const [currentCondition, setcurrentCondition] = useState()
 
 const fetchData = async (name) => {
   try {
     const response = await fetchCurrentWeather(name);
     console.log('DATA FETCHED', response);
 
-    if (response.data && response.data.weather) {
-      console.log("City Name", response.data.request[0].query);
-      setCityName(response.data.request[0].query)
+    if (response.data) {
+      setLocation(
+        {
+          city: response.data.nearest_area[0].areaName[0].value,
+          country: response.data.nearest_area[0].country[0].value,
+        }
+        )
       setData(response.data.weather)
+      setcurrentCondition(response.data.current_condition)
+      console.log("CURRENT CONDITION",response.data.current_condition );
       sessionStorage.setItem('city', JSON.stringify(response.data.request[0].query));
 
       const weather = response.data.weather;
@@ -69,7 +83,7 @@ const fetchData = async (name) => {
       const weekdayName = weekdays[dayOfWeek];
       console.log('Weekday:', weekdayName);
     } else {
-      console.log('No weather data available');
+      alert('Please enter a valid city and/or country name');
     }
   } catch (error) {
     console.error('Error:', error);
@@ -77,7 +91,7 @@ const fetchData = async (name) => {
 };
 
 useEffect(() => {
- fetchData(cityName)
+ fetchData(location.city + location.country)
 }, [])
 
 const InfoCard = ({title,value,icon})=>{
@@ -150,59 +164,20 @@ const InfoCard = ({title,value,icon})=>{
   {
     title:"feels like",
     icon: Rainy,
-    value:data && data[0].hourly[0].FeelsLikeC,
-    // value:"500",
+    value:currentCondition && currentCondition[0]?.FeelsLikeC,
   },
   {
     title:"Precipitation",
     icon:Precipitation,
-    value:data && data[0].hourly[0].precipMM + " mm",
-    // value:"500",
+    value:currentCondition && currentCondition[0]?.precipMM + " mm",
   },
   {
     title:"Visibility",
     icon:Visibility,
-    value:data && data[0].hourly[0].visibility,
-    // value:"500" ,
+    value:currentCondition && currentCondition[0]?.visibility,
   },
  ]
 
- const dummyData= [
-  {
-      time: 3,
-      temp: 15,
-  },
-  {
-      time: 6,
-      temp: 17,
-  },
-  {
-      time: 9,
-      temp: 22,
-  },
-  {
-      time: 12,
-      temp: 25,
-  },
-  {
-      time: 15,
-      temp: 7,
-  },
-  {
-      time: 18,
-      temp: 27,
-  },
-  {
-      time: 21,
-      temp: 11,
-  },
-  {
-      time: 24,
-      temp: 32,
-  },
-]
-
-// const hourlyTemps = data[0].hourly.map(({time, tempC}) => ({time, tempC}));
 const hourlyTemps = data[0].hourly.map(obj => {
   const {time, tempC} = obj;
 
@@ -218,15 +193,14 @@ console.log("Hourly Temp",hourlyTemps);
   return (
     <Fragment>
       <div className="wrapper">
-        <NavBar title={cityName} handleSearch={fetchData}/>
+        <NavBar title={`${location.city},${location.country}`}/>
         <div className="body">
           <div className="gadgets-container">
             <div className="weather-card">
               <div className="first-row">
                 <div className="header">
-                  <h1>65°C</h1>
-                  <h2>Rainy Day</h2>
-                  <p>Today expect a rainy day, partially cloudy with tempererature reaching a maximum of 28 C. Make sure to grap your embrella and raincoat before heading out</p>
+                  <h1>{currentCondition && currentCondition[0]?.temp_C}</h1>
+                  <h2>{currentCondition && currentCondition[0]?.weatherDesc[0].value}</h2>
                 </div>  
                 <div className="footer">
                   <div className="info-cards-container">
@@ -243,7 +217,7 @@ console.log("Hourly Temp",hourlyTemps);
                     <PerCentageInfoCard
                       title={"Humidity"}
                       icon={Humidity}
-                      percentage={data[0].hourly[0].humidity}
+                      percentage={currentCondition && currentCondition[0]?.humidity}
                     />
                   </div>
                 </div>
@@ -253,28 +227,11 @@ console.log("Hourly Temp",hourlyTemps);
                 <LineChart
                   data={hourlyTemps}
                   width={700}
-                  height={600}
+                  height={520}
                 />
               </div>
             </div> 
             <div className="second-section">
-              <div className="time-cards-container weekly-card">
-                <h4>Weekly Forecast</h4>
-                <hr/>
-                <div className="time-card-wrapper">
-                  {
-                    data.map((value,index)=>(
-                      <WeeklyTempCard
-                        key={index}
-                        title={"Today"}
-                        icon={ColoredCloudy}
-                        maxDegree={value.maxtempC}
-                        minDegree={value.mintempC}
-                      />
-                    ))
-                  }
-                </div>
-              </div>
               <div className="time-cards-container">
                 <h4>Hourly Forecast</h4>
                 <hr/>
@@ -287,20 +244,37 @@ console.log("Hourly Temp",hourlyTemps);
                       : time = String(parseInt(value.time) / 100)
                       
                       const title = time + ':00'
+                      const icon = iconRenderer(value.weatherDesc[0].value)
 
                       return(
                         <HourlyWeatherCard
                           key={index}
                           title={title}
                           degree={value.tempC}
-                          icon={ColoredCloudy}
+                          icon={icon}
                         />
                       )
                       })
                   }
                 </div>
               </div>
-
+              <div className="time-cards-container weekly-card">
+                <h4>Weekly Forecast</h4>
+                <hr/>
+                <div className="time-card-wrapper">
+                  {
+                    data.map((value,index)=>(                        
+                      <WeeklyTempCard
+                        key={index}
+                        title={"Today"}
+                        maxDegree={value.maxtempC}
+                        minDegree={value.mintempC}
+                      />
+                      )
+                    )
+                  }
+                </div>
+              </div>
               <div className="footer-gadgets-container">
                 <div className="footer-gadget">
                   <h4>UV Index</h4>

@@ -10,18 +10,6 @@
         flex-direction: column;
         justify-content: space-between;
         color: white;
-        .cloudySky{
-        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
-        }
-        .rainySky{
-        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
-        }
-        .clearSky{
-        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
-        }
-        .sunnySky{
-        background: url("../../assets/Images/CloudySky.jpg") no-repeat center center fixed;
-        }
         .header{
             display: flex;
             justify-content: flex-end;
@@ -58,6 +46,7 @@
         height: 100vh;
         padding-top: 3em;
         padding-inline: 4em;
+        box-sizing: border-box;
         background-color: #1F1F2B;
         box-sizing: border-box;
         font-family: 'Times New Roman', Times, serif;
@@ -69,7 +58,7 @@
             color: white;
             font-size: 80px;
             text-align: center;
-            margin-top: 1em;
+            margin-top: 0.5em;
         }
         .search-bar{
             display: flex;
@@ -85,20 +74,46 @@
                 color: white;
                 font-size: 28px;
                 text-align: center;
+                // margin-bottom: 1em;
             }
         }
         .weather-details{
             display: flex;
+            // height: 25%;
             justify-content: space-between;
-            margin-block: 1em;
+            padding-block: 1em;
             padding-inline: 10%;
             border-bottom: 1px solid white; 
             color: White;
             font-size: 24px;
-            
         }
     }
 
 }
-
-
+::placeholder {
+    color: white;
+    opacity: 1; /* Firefox */
+  }
+  
+  @media (min-width: 1200px) and (max-width: 1440px) {
+    .container .first-section .footer .temperature{
+        font-size: 120px;
+    }
+    .container .first-section .footer .date-time{
+        font-size: 46px;
+    }
+    .container .first-section .footer .date-time .date{
+        font-size: 22px;
+    }
+  }
+  @media screen and (max-width: 1200px) {
+    .container .first-section .footer .temperature{
+        font-size: 80px;
+    }
+    .container .first-section .footer .date-time{
+        font-size: 35px;
+    }
+    .container .first-section .footer .date-time .date{
+        font-size: 18px;
+    }
+  }

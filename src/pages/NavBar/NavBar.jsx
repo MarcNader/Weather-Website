@@ -1,11 +1,14 @@
 import './NavBar.styles.scss'
-import {useEffect, useState} from 'react'
+import {Fragment, useEffect, useState} from 'react'
 import Cloudy from "../../assets/Icons/cloudy.png"
+import Fahrenheit from"../../assets/Icons/fahrenheit.png"
+import Celsius from"../../assets/Icons/celsius.png"
+import Switch from "react-switch";
 
-const NavBar = ({title, handleSearch}) => {
+const NavBar = ({title}) => {
   const [screenWidth, setScreenWidth] = useState(window.innerWidth)
   const [search, setSearch] = useState('');
-
+  const [metricSystem, setMetricSystem] = useState(true)
   useEffect(() => {
     const handleResize = () => {
       setScreenWidth(window.innerWidth)
@@ -21,10 +24,14 @@ const NavBar = ({title, handleSearch}) => {
 
   const handleKeyDown = (event) => {
     if (event.key === 'Enter') {
-      handleSearch(search)
-      setSearch('');
+      sessionStorage.setItem('city', JSON.stringify(search));
+      window.location.reload()
     }
   };
+
+  const handleToggle = (checked)=>{
+    setMetricSystem(checked)
+  }
 
   return (
     <div className="navbar">
@@ -39,23 +46,35 @@ const NavBar = ({title, handleSearch}) => {
           </div>
         )
       } */}
-      <h3 style={{color:'white', fontFamily:'Tahoma', paddingLeft:'1em'}}>{title}</h3>
-      <input
-        type="search"
-        style={{width:'300px', 
-        height:'35px', 
-        marginLeft:'1em',
-        borderRadius:'10px', 
-        borderColor:'purple'}}
-        onChange={(e) => setSearch(e.target.value)}
-        onKeyDown={handleKeyDown}
+      <div className='row'>
+        <h3 style={{color:'white', fontFamily:'Tahoma', paddingLeft:'1em'}}>{title}</h3>
+        <input
+          type="search"
+          style={{width:'300px', 
+          height:'35px', 
+          marginLeft:'1em',
+          borderRadius:'10px', 
+          borderColor:'purple'}}
+          onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+      <Switch 
+        onChange={handleToggle} 
+        checked={metricSystem} 
+        offColor="#08f"
+        onColor="#2e7445"
+        uncheckedIcon={
+          <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100%'}}>
+            <img src={Fahrenheit} width={20}/>
+          </div>
+      }
+        checkedIcon={
+          <div style={{display:'flex', justifyContent:'center', alignItems:'center', height:'100%'}}>
+            <img src={Celsius} width={20}/>
+          </div>
+      }
       />
-      {/* <img
-        src={Cloudy}
-        alt="no dp"
-        className="profile-picture"
-        width={'50px'}
-      /> */}
     </div>
   )
 }

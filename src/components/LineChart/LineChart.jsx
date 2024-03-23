@@ -11,7 +11,8 @@ const LineChart = ({data, width, height}) => {
     const margin = {top: 40, right: 40, bottom: 70, left: 80};
     const innerWidth = width - margin.left - margin.right;
     const innerHeight = height - margin.top - margin.bottom;
-    const max = d3.max(data, d => d.temp);
+    const max = parseInt(d3.max(data, d => d.temp));
+    const min = parseInt(d3.min(data, d => d.temp));
 
     // Create SVG element
     const svg = d3.select(svgRef.current)
@@ -20,11 +21,11 @@ const LineChart = ({data, width, height}) => {
 
     // Create scales
     const xScale = d3.scaleLinear()
-      .domain([0, 24])
+      .domain([0, 21])
       .range([0, innerWidth]);
 
     const yScale = d3.scaleLinear()
-      .domain([0, 50])
+      .domain([min, max])
       .range([innerHeight, 0]);
 
     const line = d3.line()
@@ -43,7 +44,7 @@ const LineChart = ({data, width, height}) => {
       .attr('transform', `translate(${margin.left}, ${margin.top})`);
 
     // Add axes
-    const xAxis = d3.axisBottom(xScale).tickValues([3, 6, 9, 12, 15, 18, 21, 24]);
+    const xAxis = d3.axisBottom(xScale).tickValues([0,3, 6, 9, 12, 15, 18, 21]);
     const yAxis = d3.axisLeft(yScale);
 
     svg.append('g')

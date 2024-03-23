@@ -1,8 +1,8 @@
 import "./WeeklyTempCard.styles.scss"
 
-const WeeklyTempCard = ({title,minDegree,maxDegree,icon}) => {
+const WeeklyTempCard = ({title,minDegree,maxDegree}) => {
   return (
-    <div className="time-card">
+    <div className="Weekly-card-temp">
       <h5>{title}</h5>
       <div className="row">
         <h5>Min</h5>
@@ -13,11 +13,6 @@ const WeeklyTempCard = ({title,minDegree,maxDegree,icon}) => {
         <h5>Max</h5>
         <h2>{maxDegree}</h2>
       </div>
-      <hr/>
-      <img
-        src={icon}
-        width={35}
-      />
     </div>
   )
 }

@@ -3,7 +3,7 @@ const BASE_URL = ' https://api.worldweatheronline.com/premium/v1/weather.ashx?ke
 
 export async function fetchCurrentWeather(query) {
   // const apiUrl = `https://api.worldweatheronline.com/premium/v1/weather.ashx?key=${apiKey}&q=${cityName}&num_of_days=${2}&format=json`;
-  const apiUrl = BASE_URL + `q=${query}&format=json`;
+  const apiUrl = BASE_URL + `q=${query}&includelocation=yes&format=json`;
 
   try {
     const response = await fetch(apiUrl);

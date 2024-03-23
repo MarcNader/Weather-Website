@@ -1,8 +1,12 @@
-.time-card{
-    padding:1em;
+.hourly-card-temp{
+    padding:2em;
     border-radius: 10px;
     text-align: center;
     cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     h5, h2{
         margin: 0;
     }
