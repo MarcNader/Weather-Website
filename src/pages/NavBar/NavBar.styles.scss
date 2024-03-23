@@ -36,7 +36,10 @@
         padding-left:1em;
     }
 }
-
+::placeholder {
+    color: gray;
+    opacity: 1; /* Firefox */
+  }
 @media (max-width: 700px) {
    .navbar{
     justify-content: space-between;

@@ -26,6 +26,7 @@ const NavBar = ({title}) => {
         <h3 className='title'>{title}</h3>
         <input
           type="search"
+          placeholder='Search city and or/ country..'
           className='navbar-searchBox'
           onChange={(e) => setSearch(e.target.value)}
           onKeyDown={handleKeyDown}
